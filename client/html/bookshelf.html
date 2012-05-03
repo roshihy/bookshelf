@@ -1,0 +1,117 @@
+<head>
+	<meta charset="utf-8">
+	<title>Bookshelf</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>
+	{{> modal_add}}
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" href="#">Bookshelf</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a data-toggle="modal" data-backdrop="true" href="#modal-add" >本を追加する</a></li>
+						<li><a
+							href="mailto:hoge@hoge.co.jp?subject=本をかってほしい">書籍購入申請</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div>
+				<div class="hero-unit">
+					<h1>ほんだな</h1>
+					<p>ここにある本は自由に借りられます。「死んだ本棚」になると大変なことがおこるため、みなさんジャンジャン借りましょう。</p>
+				</div>
+				<div class="books-wrapper">
+					{{> book_list}}
+				</div>
+			</div>
+		</div>
+		<hr>
+		<footer>
+			<p class="right"><small>&copy; asg roshihy 2012</small></p>
+		</footer>
+	</div>
+</body>
+
+<template name="book_list">
+	{{#each books}}
+		<div class="span4 book-wrapper">
+			<div class="span4 none-margin">
+				{{#if borrow}}
+					<h4 class="alert">
+						{{title}}
+						{{#if borrow}}（貸し出し中）{{/if}}
+					</h4>
+				{{else}}
+					<h4 class="title">
+						{{title}}
+					</h4>
+				{{/if}}
+			</div>
+			<div class="span3">
+				{{#if author}}
+					<p><small>著者：{{author}}</small></p>
+				{{/if}}
+				{{#if price}}
+					<p><small>お値段：{{price}}円</small></p>
+				{{/if}}
+				<div class="row action-button-block">
+					<p class="button-wrapper">
+						<a class="btn" href="{{itemUrl}}">楽天ブックスへ</a>
+					</p>
+					<p class="button-wrapper">
+						{{#if borrow}}
+							<a class="btn btn-warning return">返却する</a>
+						{{else}}
+							<a class="btn btn-primary borrow">この本を借りる</a>
+						{{/if}}
+						<input type="hidden" class="borrow-num" value="{{isbn}}" />
+					</p>
+				</div>
+			</div>
+			<div class="span1 pagination-centered none-margin book-image-wrapper">
+				<img class="book-image" src="{{image}}" />
+			</div>
+			<div class="span4 tags-wrapper">
+				<p>
+					<small>ここにタグが入る</small>
+					<small>ここにタグが入る</small>
+					<small>ここにタグが入る</small>
+					<small>ここにタグが入る</small>
+					<small>ここにタグが入る</small>
+				</p>
+			</div>
+		</div>
+	{{/each}}
+</template>
+
+<template name="modal_add">
+	<div id="modal-add" class="modal hide fade" style="display: none;">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">×</button>
+			<h3>追加する本の情報を教えてください。</h3>
+		</div>
+		<div class="modal-body">
+			<div class="clearfix">
+			    <label for="isbn">ISBNコード</label>
+			    <div class="input">
+			    	<input placeholder="ISBN-13コードを入力してください" class="span3" id="isbn-input" name="isbn-input" size="30" type="text">
+			    	<span class="help-block">数字13桁です、ハイフンはなしです。</span>
+			    </div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a class="add btn primary">追加する</a>
+			<a class="btn secondary" data-dismiss="modal">キャンセル</a>
+		</div>
+	</div>
+</template>
