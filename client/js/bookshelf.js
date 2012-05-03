@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////////
 //コレクション定義
 //
@@ -10,6 +9,87 @@ Books = new Meteor.Collection("books");
 Session.set('tag_filter', null);
 Session.set('editing_addtag', null);
 Session.set('editing_itemname', null);
+
+//////////////////////////////////////////////
+//独自定義関数
+//
+var focus_field_by_id = function (id) {
+  var input = document.getElementById(id);
+  if (input) {
+    input.focus();
+    input.select();
+  }
+};
+
+var BS = {};
+(function(){
+	BS.rakutenUrl = 'http://api.rakuten.co.jp/rws/3.0/json';
+	BS.params = {
+			developerId : '0e4c3e1c49abcaf374e395ddd1fd273a',
+			operation : 'BooksBookSearch',
+			version : '2011-12-01',
+			isbn : '',
+	};
+	BS.rakutenApiCall = function(isbn){
+		var ret = {};
+		BS.params.isbn = isbn;
+
+		$.ajax({
+			type: 'GET',
+			data: BS.params,
+			url: BS.rakutenUrl,
+			dataType: 'JSONP',
+			jsonp: 'callBack',
+			async: false,
+			success: function(data, status, xhr){
+				if(data["Body"]){
+					var item = data["Body"]["BooksBookSearch"]["Items"]["Item"][0];
+					ret = {
+						author : item["author"],
+						title : item["title"],
+						cap : item["itemCaption"],
+						image : item["mediumImageUrl"],
+						itemUrl : item["itemUrl"],
+						price: item["itemPrice"],
+						titleKana: item["titleKana"],
+						isbn : isbn,
+					};
+					Books.insert(ret);
+					alert("登録が完了しました");
+				} else {
+					alert("該当書籍が見つかりませんでした。");
+				};
+			},
+			error: function(xhr, status, err){
+				alert("該当書籍が見つかりませんでした。。");
+			},
+		});
+	};
+})();
+
+var okcancel_events = function (selector) {
+	return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
+};
+
+var make_okcancel_handler = function (options) {
+	var ok = options.ok || function () {};
+	var cancel = options.cancel || function () {};
+
+	return function (evt) {
+		if (evt.type === "keydown" && evt.which === 27) {
+			// escape = cancel
+			cancel.call(this, evt);
+		} else if (evt.type === "focusout") {
+			// blur/return/enter = ok/submit if non-empty
+			var value = String(evt.target.value || "");
+			if (value) {
+				ok.call(this, value, evt);
+			} else {
+				cancel.call(this, evt);
+			}
+		}
+	};
+};
 
 //////////////////////////////////////////////
 //Handlebars変数定義
@@ -72,7 +152,7 @@ Template.book_list.books = function () {
 	  if (tag_filter){
 		  sel.tags = tag_filter;
 	  }
-	  return Books.find(sel, {sort: {borrow: false, titleKana: 1}});
+	  return Books.find(sel, {sort: {_id: 1}});
 };
 
 
@@ -122,59 +202,25 @@ Template.tag_item.events = {
 	}
 };
 
-	//////////////////////////////////////////////
-//関数定義
-//
-var BS = {};
-(function(){
-	BS.rakutenUrl = 'http://api.rakuten.co.jp/rws/3.0/json';
-	BS.params = {
-			developerId : '0e4c3e1c49abcaf374e395ddd1fd273a',
-			operation : 'BooksBookSearch',
-			version : '2011-12-01',
-			isbn : '',
-	};
-	BS.rakutenApiCall = function(isbn){
-		var ret = {};
-		BS.params.isbn = isbn;
+Template.book.events[ okcancel_events('#edittag-input') ] =
+	  make_okcancel_handler({
+	    ok: function (value) {
+	      Books.update({_id: this._id}, {$addToSet: {tags: value}});
+	      Session.set('editing_addtag', null);
+	    },
+	    cancel: function () {
+	      Session.set('editing_addtag', null);
+	    }
+});
 
-		$.ajax({
-			type: 'GET',
-			data: BS.params,
-			url: BS.rakutenUrl,
-			dataType: 'JSONP',
-			jsonp: 'callBack',
-			async: false,
-			success: function(data, status, xhr){
-				if(data["Body"]){
-					var item = data["Body"]["BooksBookSearch"]["Items"]["Item"][0];
-					ret = {
-						author : item["author"],
-						title : item["title"],
-						cap : item["itemCaption"],
-						image : item["mediumImageUrl"],
-						itemUrl : item["itemUrl"],
-						price: item["itemPrice"],
-						titleKana: item["titleKana"],
-						isbn : isbn,
-					};
-					Books.insert(ret);
-					alert("登録が完了しました");
-				} else {
-					alert("該当書籍が見つかりませんでした。");
-				};
-			},
-			error: function(xhr, status, err){
-				alert("該当書籍が見つかりませんでした。");
-			},
-		});
-	};
-})();
+Template.tag.events = {
+	'click .remove': function (evt) {
+	var tag = this.tag;
+	var id = this.book_id;
 
-var focus_field_by_id = function (id) {
-  var input = document.getElementById(id);
-  if (input) {
-    input.focus();
-    input.select();
-  }
+    evt.target.parentNode.style.opacity = 0;
+    Meteor.setTimeout(function () {
+    	Books.update({_id: id}, {$pull: {tags: tag}});
+	}, 300);
+	  }
 };

@@ -13,6 +13,7 @@ Meteor.startup(function () {
             	       "hogehoge",
             	       "fugafuga",
             	       ],
+            	 titleKana: "ジャヴァスクリプトダイゴハン"
             },
             {
             	isbn: "9784873113258",
@@ -25,6 +26,7 @@ Meteor.startup(function () {
             	       "hogehoge",
             	       "piyoipiyo"
             	       ],
+              	 titleKana: "ジャヴァスクリプトクイックリファレンス"
             },
             {
             	isbn: "9784774142043",
@@ -37,6 +39,7 @@ Meteor.startup(function () {
             	       "fugafuga",
             	       "piyoipiyo"
             	       ],
+               	 titleKana: "ウェブヲササエルギジュツ"
             }
         ];
 		for (var i = 0; i < data.length; i++) {
