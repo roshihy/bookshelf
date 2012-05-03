@@ -1,97 +1,105 @@
 <head>
 	<meta charset="utf-8">
 	<title>Bookshelf</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 </head>
 <body>
 	{{> modal_add}}
-	<div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span>
-				</a> <a class="brand" href="#">Bookshelf</a>
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">Bookshelf</a>
 				<div class="nav-collapse">
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
 						<li><a data-toggle="modal" data-backdrop="true" href="#modal-add" >本を追加する</a></li>
-						<li><a
-							href="mailto:hoge@hoge.co.jp?subject=本をかってほしい">書籍購入申請</a></li>
+						<li><a href="mailto:hoge@hoge.co.jp?subject=本をかってほしい">書籍購入申請</a></li>
+						<li style="font-style: italic;"><a href="#">"ここにある本は自由に借りられます。「死んだ本棚」になると大変なことがおこるため、みなさんジャンジャン借りましょう。"</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<div class="row">
-			<div>
-				<div class="hero-unit">
-					<h1>ほんだな</h1>
-					<p>ここにある本は自由に借りられます。「死んだ本棚」になると大変なことがおこるため、みなさんジャンジャン借りましょう。</p>
-				</div>
-				<div class="books-wrapper">
-					{{> book_list}}
-				</div>
-			</div>
+	<div class="container">
+		<div class="top-wrapper">
+            {{> tag_filter}}
 		</div>
-		<hr>
-		<footer>
-			<p class="right"><small>&copy; asg roshihy 2012</small></p>
-		</footer>
+		<div class="books-wrapper">
+			{{> book_list}}
+		</div>
 	</div>
+	<hr>
+	<footer>
+		<p class="right"><small>&copy; roshihy 2012</small></p>
+	</footer>
 </body>
 
 <template name="book_list">
 	{{#each books}}
+		{{> book}}
+	{{/each}}
+</template>
+
+<template name="book">
 		<div class="span4 book-wrapper">
 			<div class="span4 none-margin">
-				{{#if borrow}}
-					<h4 class="alert">
-						{{title}}
-						{{#if borrow}}（貸し出し中）{{/if}}
-					</h4>
-				{{else}}
-					<h4 class="title">
-						{{title}}
-					</h4>
-				{{/if}}
+				<h4 class="{{borrow}} title book-title-wrapper">
+					{{title}}
+					{{#if borrow}}<br />（貸し出し中）{{/if}}
+				</h4>
 			</div>
-			<div class="span3">
-				{{#if author}}
-					<p><small>著者：{{author}}</small></p>
-				{{/if}}
-				{{#if price}}
-					<p><small>お値段：{{price}}円</small></p>
-				{{/if}}
-				<div class="row action-button-block">
-					<p class="button-wrapper">
-						<a class="btn" href="{{itemUrl}}">楽天ブックスへ</a>
-					</p>
-					<p class="button-wrapper">
-						{{#if borrow}}
-							<a class="btn btn-warning return">返却する</a>
-						{{else}}
-							<a class="btn btn-primary borrow">この本を借りる</a>
-						{{/if}}
-						<input type="hidden" class="borrow-num" value="{{isbn}}" />
-					</p>
+			<div class="row book-detail-wrapper">
+				<div class="span3">
+					{{#if author}}
+						<p class="book-detail"><small>著者：{{author}}</small></p>
+					{{/if}}
+					{{#if price}}
+						<p class="book-detail"><small>お値段：{{price}}円</small></p>
+					{{/if}}
+					<div class="row action-button-block">
+						<p class="button-wrapper">
+							<a class="btn" href="{{itemUrl}}">楽天ブックスへ</a>
+						</p>
+						<p class="button-wrapper">
+							{{#if borrow}}
+								<a class="btn btn-warning return">返却する</a>
+							{{else}}
+								<a class="btn btn-primary borrow">借りる</a>
+							{{/if}}
+						</p>
+					</div>
+				</div>
+				<div class="span1 pagination-centered none-margin book-image-wrapper">
+					<img class="book-image" src="{{image}}" />
 				</div>
 			</div>
-			<div class="span1 pagination-centered none-margin book-image-wrapper">
-				<img class="book-image" src="{{image}}" />
-			</div>
 			<div class="span4 tags-wrapper">
-				<p>
-					<small>ここにタグが入る</small>
-					<small>ここにタグが入る</small>
-					<small>ここにタグが入る</small>
-					<small>ここにタグが入る</small>
-					<small>ここにタグが入る</small>
-				</p>
+				{{#each tags_list}}
+					{{> tag}}
+				{{/each}}
+		      {{#if adding_tag}}
+		        <div class="tag edittag">
+		          <input type="text" id="edittag-input" value="" />
+		        </div>
+		      {{else}}
+		        <div class="tag addtag">
+		          +tag
+		        </div>
+		      {{/if}}
 			</div>
 		</div>
-	{{/each}}
+</template>
+
+<template name="tag">
+  <div class="tag removable_tag">
+    <div class="name">{{tag}}</div>
+    <div class="remove"></div>
+  </div>
 </template>
 
 <template name="modal_add">
@@ -114,4 +122,19 @@
 			<a class="btn secondary" data-dismiss="modal">キャンセル</a>
 		</div>
 	</div>
+</template>
+
+<template name="tag_filter">
+	<div class="tag-list">
+	<p class="label">タグ：</p>
+    {{#each tags}}
+      {{> tag_item}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="tag_item">
+  <p class="tag {{selected}}">
+    {{tag_text}} <span class="count">({{count}})</span>
+  </p>
 </template>
