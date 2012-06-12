@@ -5,7 +5,7 @@
 </head>
 <body>
 	{{> modal_add}}
-    <div class="navbar navbar-fixed-top">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -27,7 +27,7 @@
 	</div>
 	<div class="container">
 		<div class="top-wrapper">
-            {{> tag_filter}}
+			{{> tag_filter}}
 		</div>
 		<div class="books-wrapper">
 			{{> book_list}}
@@ -40,101 +40,101 @@
 </body>
 
 <template name="book_list">
-	{{#each books}}
-		{{> book}}
-	{{/each}}
+{{#each books}}
+{{> book}}
+{{/each}}
 </template>
 
 <template name="book">
-		<div class="span4 book-wrapper">
-			<div class="span4 none-margin">
-				<h4 class="{{borrow}} title book-title-wrapper">
-					{{title}}
-					{{#if borrow}}<br />（貸し出し中）{{/if}}
-				</h4>
-			</div>
-			<div class="row book-detail-wrapper">
-				<div class="span3">
-					{{#if author}}
-						<p class="book-detail"><small>著者：{{author}}</small></p>
+<div class="span4 book-wrapper">
+	<div class="span4 none-margin">
+		<h4 class="{{borrow}} title book-title-wrapper">
+			{{title}}
+			{{#if borrow}}<br />（貸し出し中）{{/if}}
+		</h4>
+	</div>
+	<div class="row book-detail-wrapper">
+		<div class="span3">
+			{{#if author}}
+			<p class="book-detail"><small>著者：{{author}}</small></p>
+			{{/if}}
+			{{#if price}}
+			<p class="book-detail"><small>お値段：{{price}}円</small></p>
+			{{/if}}
+			<div class="row action-button-block">
+				<p class="button-wrapper">
+					<a class="btn" href="{{itemUrl}}">楽天ブックスへ</a>
+				</p>
+				<p class="button-wrapper">
+					{{#if borrow}}
+					<a class="btn btn-warning return">返却する</a>
+					{{else}}
+					<a class="btn btn-primary borrow">借りる</a>
 					{{/if}}
-					{{#if price}}
-						<p class="book-detail"><small>お値段：{{price}}円</small></p>
-					{{/if}}
-					<div class="row action-button-block">
-						<p class="button-wrapper">
-							<a class="btn" href="{{itemUrl}}">楽天ブックスへ</a>
-						</p>
-						<p class="button-wrapper">
-							{{#if borrow}}
-								<a class="btn btn-warning return">返却する</a>
-							{{else}}
-								<a class="btn btn-primary borrow">借りる</a>
-							{{/if}}
-						</p>
-					</div>
-				</div>
-				<div class="span1 pagination-centered none-margin book-image-wrapper">
-					<img class="book-image" src="{{image}}" />
-				</div>
-			</div>
-			<div class="span4 tags-wrapper">
-				{{#each tags_list}}
-					{{> tag}}
-				{{/each}}
-		      {{#if adding_tag}}
-		        <div class="tag edittag">
-		          <input type="text" id="edittag-input" value="" />
-		        </div>
-		      {{else}}
-		        <div class="tag addtag">
-		          +tag
-		        </div>
-		      {{/if}}
+				</p>
 			</div>
 		</div>
+		<div class="span1 pagination-centered none-margin book-image-wrapper">
+			<img class="book-image" src="{{image}}" />
+		</div>
+	</div>
+	<div class="span4 tags-wrapper">
+		{{#each tags_list}}
+		{{> tag}}
+		{{/each}}
+		{{#if adding_tag}}
+		<div class="tag edittag">
+			<input type="text" id="edittag-input" value="" />
+		</div>
+		{{else}}
+		<div class="tag addtag">
+			+tag
+		</div>
+		{{/if}}
+	</div>
+</div>
 </template>
 
 <template name="tag">
-  <div class="tag removable_tag">
-    <div class="name">{{tag}}</div>
-    <div class="remove"></div>
-  </div>
+<div class="tag removable_tag">
+	<div class="name">{{tag}}</div>
+	<div class="remove"></div>
+</div>
 </template>
 
 <template name="modal_add">
-	<div id="modal-add" class="modal hide fade" style="display: none;">
-		<div class="modal-header">
-			<button class="close" data-dismiss="modal">×</button>
-			<h3>追加する本の情報を教えてください。</h3>
-		</div>
-		<div class="modal-body">
-			<div class="clearfix">
-			    <label for="isbn">ISBNコード</label>
-			    <div class="input">
-			    	<input placeholder="ISBN-13コードを入力してください" class="span3" id="isbn-input" name="isbn-input" size="30" type="text">
-			    	<span class="help-block">数字13桁です、ハイフンはなしです。</span>
-			    </div>
+<div id="modal-add" class="modal hide fade" style="display: none;">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">×</button>
+		<h3>追加する本の情報を教えてください。</h3>
+	</div>
+	<div class="modal-body">
+		<div class="clearfix">
+			<label for="isbn">ISBNコード</label>
+			<div class="input">
+				<input placeholder="ISBN-13コードを入力してください" class="span3" id="isbn-input" name="isbn-input" size="30" type="text">
+				<span class="help-block">数字13桁です、ハイフンはなしです。</span>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<a class="add btn primary">追加する</a>
-			<a class="btn secondary" data-dismiss="modal">キャンセル</a>
-		</div>
 	</div>
+	<div class="modal-footer">
+		<a class="add btn primary">追加する</a>
+		<a class="btn secondary" data-dismiss="modal">キャンセル</a>
+	</div>
+</div>
 </template>
 
 <template name="tag_filter">
-	<div class="tag-list">
+<div class="tag-list">
 	<div class="tag_label">タグ：</div>
-    {{#each tags}}
-      {{> tag_item}}
-    {{/each}}
-  </div>
+	{{#each tags}}
+	{{> tag_item}}
+	{{/each}}
+</div>
 </template>
 
 <template name="tag_item">
-  <p class="tag {{selected}}">
-    {{tag_text}} <span class="count">({{count}})</span>
-  </p>
+<p class="tag {{selected}}">
+	{{tag_text}} <span class="count">({{count}})</span>
+</p>
 </template>
