@@ -21,7 +21,7 @@ var focus_field_by_id = function (id) {
 	}
 };
 
-var BS = {};
+var BS = BS || {};
 (function(){
 	BS.rakutenUrl = 'http://api.rakuten.co.jp/rws/3.0/json';
 	BS.params = {
