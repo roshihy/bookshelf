@@ -10,19 +10,19 @@ Session.set('tag_filter', null);
 Session.set('editing_addtag', null);
 Session.set('editing_itemname', null);
 
+var BS = BS || {};
+(function(){
 //////////////////////////////////////////////
 //独自定義関数
 //
-var focus_field_by_id = function (id) {
-	var input = document.getElementById(id);
-	if (input) {
-		input.focus();
-		input.select();
-	}
-};
+	BS.focus_field_by_id = function(id) {
+		var input = $(id);
+		if (input.length !== 0) {
+			input.focus();
+			input.select();
+		}
+	};
 
-var BS = BS || {};
-(function(){
 	BS.rakutenUrl = 'http://api.rakuten.co.jp/rws/3.0/json';
 	BS.params = {
 		developerId : '0e4c3e1c49abcaf374e395ddd1fd273a',
@@ -169,7 +169,7 @@ var BS = BS || {};
 			'click .addtag': function (evt) {
 				Session.set('editing_addtag', this._id);
 				Meteor.flush();
-				focus_field_by_id("edittag-input");
+				BS.focus_field_by_id("edittag-input");
 			},
 		};
 
