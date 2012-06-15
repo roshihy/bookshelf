@@ -28,7 +28,7 @@ var BS = BS || {};
 		developerId : '0e4c3e1c49abcaf374e395ddd1fd273a',
 		operation : 'BooksBookSearch',
 		version : '2011-12-01',
-		isbn : '',
+		isbn : ''
 	};
 		BS.rakutenApiCall = function(isbn){
 			var ret = {};
@@ -52,17 +52,17 @@ var BS = BS || {};
 							itemUrl : item["itemUrl"],
 							price: item["itemPrice"],
 							titleKana: item["titleKana"],
-							isbn : isbn,
+							isbn : isbn
 						};
 							Books.insert(ret);
 							alert("登録が完了しました");
 						} else {
 							alert("該当書籍が見つかりませんでした。");
-						};
+						}
 					},
 					error: function(xhr, status, err){
 						alert("該当書籍が見つかりませんでした。。");
-					},
+					}
 				});
 			};
 		})();
@@ -170,7 +170,7 @@ var BS = BS || {};
 				Session.set('editing_addtag', this._id);
 				Meteor.flush();
 				BS.focus_field_by_id("edittag-input");
-			},
+			}
 		};
 
 		Template.modal_add.events = {
@@ -183,10 +183,10 @@ var BS = BS || {};
 				} else if(!isbn.length === 13){
 					alert("桁数が不正です：「" + isbn + "」");
 					return;
-				} else if(Books.find({isbn: isbn}).count() !=　0){
+				} else if(Books.find({isbn: isbn}).count() !== 0){
 					alert("すでにその書籍は登録されています。");
 					return;
-				};
+				}
 				//書籍情報を取得しDBに格納する処理
 				BS.rakutenApiCall(isbn);
 			}
