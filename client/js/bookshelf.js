@@ -1,7 +1,7 @@
 //////////////////////////////////////////////
 //コレクション定義
 //
-Books = new Meteor.Collection("books");
+Books = new Meteor.Collection('books');
 
 //////////////////////////////////////////////
 //セッション定義
@@ -42,26 +42,26 @@ var BS = BS || {};
 				jsonp: 'callBack',
 				async: false,
 				success: function(data, status, xhr) {
-					if (data["Body"]) {
-						var item = data["Body"]["BooksBookSearch"]["Items"]["Item"][0];
+					if (data['Body']) {
+						var item = data['Body']['BooksBookSearch']['Items']['Item'][0];
 						ret = {
-							author : item["author"],
-							title : item["title"],
-							cap : item["itemCaption"],
-							image : item["mediumImageUrl"],
-							itemUrl : item["itemUrl"],
-							price: item["itemPrice"],
-							titleKana: item["titleKana"],
+							author : item['author'],
+							title : item['title'],
+							cap : item['itemCaption'],
+							image : item['mediumImageUrl'],
+							itemUrl : item['itemUrl'],
+							price: item['itemPrice'],
+							titleKana: item['titleKana'],
 							isbn : isbn
 						};
 							Books.insert(ret);
-							alert("登録が完了しました");
+							alert('登録が完了しました');
 						} else {
-							alert("該当書籍が見つかりませんでした。");
+							alert('該当書籍が見つかりませんでした。');
 						}
 					},
 					error: function(xhr, status, err) {
-						alert("該当書籍が見つかりませんでした。。");
+						alert('該当書籍が見つかりませんでした。。');
 					}
 				});
 			};
@@ -76,12 +76,12 @@ var BS = BS || {};
 			var cancel = options.cancel || function() {};
 
 			return function(evt) {
-				if (evt.type === "keydown" && evt.which === 27) {
+				if (evt.type === 'keydown' && evt.which === 27) {
 					// escape = cancel
 					cancel.call(this, evt);
-				} else if (evt.type === "focusout") {
+				} else if (evt.type === 'focusout') {
 					// blur/return/enter = ok/submit if non-empty
-					var value = String(evt.target.value || "");
+					var value = String(evt.target.value || '');
 					if (value) {
 						ok.call(this, value, evt);
 					} else {
@@ -97,7 +97,7 @@ var BS = BS || {};
 
 		//書籍の貸し出し状態を判別して返す
 		Template.book.borrow = function() {
-			return this.borrow ? "alert" : "";
+			return this.borrow ? 'alert' : '';
 		};
 
 		//タグフィルター用のタグ名/カウント数を返す
@@ -108,7 +108,7 @@ var BS = BS || {};
 			Books.find({}).forEach(function(book) {
 				_.each(book.tags, function(tag) {
 					var tag_info = _.find(tag_infos, function(x) { return x.tag === tag; });
-					if (! tag_info) {
+					if (!tag_info) {
 						tag_infos.push({tag: tag, count: 1});
 					}
 					else {
@@ -126,10 +126,10 @@ var BS = BS || {};
 
 		//タグのテキスト、なければ「すべて選択」を返す
 		Template.tag_item.tag_text = function() {
-			return this.tag || "すべて選択";
+			return this.tag || 'すべて選択';
 		};
 
-		//選択されているタグの識別にために"selected"文言を返す
+		//選択されているタグの識別にために'selected'文言を返す
 		Template.tag_item.selected = function() {
 			return Session.equals('tag_filter', this.tag) ? 'selected' : '';
 		};
@@ -171,22 +171,22 @@ var BS = BS || {};
 			'click .addtag': function(evt) {
 				Session.set('editing_addtag', this._id);
 				Meteor.flush();
-				BS.focus_field_by_id("edittag-input");
+				BS.focus_field_by_id('edittag-input');
 			}
 		};
 
 		Template.modal_add.events = {
 			'click a.add': function() {
-				var isbn = $("input#isbn-input").val();
+				var isbn = $('input#isbn-input').val();
 				//バリデーション
 				if (isbn.match(/[^0-9]+/)) {
-					alert("ISBN-13として不正な値です：「" + isbn + "」");
+					alert('ISBN-13として不正な値です：「' + isbn + '」');
 					return;
 				} else if (!isbn.length === 13) {
-					alert("桁数が不正です：「" + isbn + "」");
+					alert('桁数が不正です：「' + isbn + '」');
 					return;
 				} else if (Books.find({isbn: isbn}).count() !== 0) {
-					alert("すでにその書籍は登録されています。");
+					alert('すでにその書籍は登録されています。');
 					return;
 				}
 				//書籍情報を取得しDBに格納する処理
