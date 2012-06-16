@@ -65,31 +65,31 @@ var BS = BS || {};
 			}
 		});
 	};
-})();
 
-var okcancel_events = function(selector) {
-	return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
-};
-
-var make_okcancel_handler = function (options) {
-	var ok = options.ok || function() {};
-	var cancel = options.cancel || function() {};
-
-	return function(evt) {
-		if (evt.type === 'keydown' && evt.which === 27) {
-			// escape = cancel
-			cancel.call(this, evt);
-		} else if (evt.type === 'focusout') {
-			// blur/return/enter = ok/submit if non-empty
-			var value = String(evt.target.value || '');
-			if (value) {
-				ok.call(this, value, evt);
-			} else {
-				cancel.call(this, evt);
-			}
-		}
+	BS.okcancel_events = function(selector) {
+		return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
 	};
-};
+
+	BS.make_okcancel_handler = function (options) {
+		var ok = options.ok || function() {};
+		var cancel = options.cancel || function() {};
+
+		return function(evt) {
+			if (evt.type === 'keydown' && evt.which === 27) {
+				// escape = cancel
+				cancel.call(this, evt);
+			} else if (evt.type === 'focusout') {
+				// blur/return/enter = ok/submit if non-empty
+				var value = String(evt.target.value || '');
+				if (value) {
+					ok.call(this, value, evt);
+				} else {
+					cancel.call(this, evt);
+				}
+			}
+		};
+	};
+})();
 
 //////////////////////////////////////////////
 //Handlebars変数定義
@@ -204,8 +204,7 @@ Template.tag_item.events = {
 	}
 };
 
-Template.book.events[okcancel_events('#edittag-input')] =
-make_okcancel_handler({
+Template.book.events[BS.okcancel_events('#edittag-input')] = BS.make_okcancel_handler({
 	ok: function(value) {
 		Books.update({_id: this._id}, {$addToSet: {tags: value}});
 		Session.set('editing_addtag', null);
