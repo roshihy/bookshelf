@@ -1,6 +1,6 @@
 // if the database is empty on server start, create some sample data.
-Meteor.startup(function () {
-	if(Books.find().count() === 0){
+Meteor.startup(function() {
+	if (Books.find().count() === 0) {
 		var data = [
 			{
 				isbn: "9784873113296",
@@ -11,7 +11,7 @@ Meteor.startup(function () {
 				itemUrl: "http://books.rakuten.co.jp/rb/4493265/",
 				tags: [
 					"hogehoge",
-					"fugafuga",
+					"fugafuga"
 				],
 					titleKana: "ジャヴァスクリプトダイゴハン"
 				},
@@ -44,8 +44,8 @@ Meteor.startup(function () {
 			];
 			for (var i = 0; i < data.length; i++) {
 				Books.insert(data[i]);
-			};
-		};
+			}
+		}
 	});
 
-	Books = new Meteor.Collection("books");
+	Books = new Meteor.Collection('books');
