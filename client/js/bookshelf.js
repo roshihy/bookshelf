@@ -42,16 +42,16 @@ var BS = BS || {};
 			jsonp: 'callBack',
 			async: false,
 			success: function(data, status, xhr) {
-				if (data['Body']) {
-					var item = data['Body']['BooksBookSearch']['Items']['Item'][0];
+				if (data.Body) {
+					var item = data.Body.BooksBookSearch.Items.Item[0];
 					ret = {
-						author : item['author'],
-						title : item['title'],
-						cap : item['itemCaption'],
-						image : item['mediumImageUrl'],
-						itemUrl : item['itemUrl'],
-						price: item['itemPrice'],
-						titleKana: item['titleKana'],
+						author : item.author,
+						title : item.title,
+						cap : item.itemCaption,
+						image : item.mediumImageUrl,
+						itemUrl : item.itemUrl,
+						price: item.itemPrice,
+						titleKana: item.titleKana,
 						isbn : isbn
 					};
 						Books.insert(ret);
