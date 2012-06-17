@@ -11,7 +11,7 @@ Session.set('editing_addtag', null);
 Session.set('editing_itemname', null);
 
 var BS = BS || {};
-(function(){
+(function() {
 //////////////////////////////////////////////
 //独自定義関数
 //
